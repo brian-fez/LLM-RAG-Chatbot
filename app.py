@@ -47,17 +47,17 @@ with st.sidebar:
 
 # Home Page
 if choice == "🏠 Home":
-    st.title("📄 Document Buddy App")
+    st.title("📄 Document RAG App")
     st.markdown("""
-    Welcome to **Document Buddy App**! 🚀
+    Welcome to **Document RAG App**! 🚀
 
-    **Built using Open Source Stack (Llama 3.2, BGE Embeddings, and Qdrant running locally within a Docker Container.)**
+    **Built using Open Source Stack (Llama 3.2, BGE Embeddings, and FAISS running locally.)**
 
     - **Upload Documents**: Easily upload your PDF documents.
     - **Summarize**: Get concise summaries of your documents.
     - **Chat**: Interact with your documents through our intelligent chatbot.
 
-    Enhance your document management experience with Document Buddy! 😊
+    Enhance your document management experience with Document RAG! 😊
     """)
 
 # Chatbot Page
@@ -114,7 +114,7 @@ elif choice == "🤖 Chatbot":
                     
                     # Initialize ChatbotManager and inject FAISS vector store
                     chatbot = ChatbotManager(
-                        model_name="BAAI/bge-small-en",
+                        model_name="BAAI/bge-small-en-v1.5",
                         device="cpu",
                         encode_kwargs={"normalize_embeddings": True},
                         llm_model="llama3.2",
@@ -170,13 +170,11 @@ elif choice == "📧 Contact":
     st.markdown("""
     We'd love to hear from you! Whether you have a question, feedback, or want to contribute, feel free to reach out.
 
-    - **Email:** [developer@example.com](mailto:aianytime07@gmail.com) ✉️
-    - **GitHub:** [Contribute on GitHub](https://github.com/AIAnytime/Document-Buddy-App) 🛠️
+    - **GitHub:** [Contribute on GitHub](https://github.com/brian-fez) 🛠️
 
     If you'd like to request a feature or report a bug, please open a pull request on our GitHub repository. Your contributions are highly appreciated! 🙌
     """)
 
 # Footer
 st.markdown("---")
-st.markdown("© 2024 Document Buddy App by AI Anytime. All rights reserved. 🛡️")
-
+st.markdown("© 2025 Document RAG. All rights reserved. 🛡️")
