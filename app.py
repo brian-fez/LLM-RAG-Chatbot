@@ -29,7 +29,7 @@ with st.sidebar:
     st.markdown("### 💬 Chat Sessions")
 
     # Start new session
-    new_name = st.text_input("Name your new session", placeholder="e.g. invoice-2025 or chat with law.pdf")
+    new_name = st.text_input("Name your new session", placeholder="e.g. invoice-2025 or chat with law")
     if st.button("➕ Start New Chat"):
         session_id = new_name if new_name else datetime.datetime.now().strftime("session-%Y%m%d-%H%M%S") + "-" + str(uuid.uuid4())[:8]
         st.session_state.session_id = session_id
