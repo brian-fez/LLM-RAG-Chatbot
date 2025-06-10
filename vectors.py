@@ -2,7 +2,7 @@ import os
 from langchain_community.document_loaders import UnstructuredPDFLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_community.embeddings import HuggingFaceBgeEmbeddings
-from langchain_community.vectorstores import FAISS  # ⬅️ FAISS instead of Qdrant
+from langchain_community.vectorstores import FAISS  # for production qdrant docker
 
 class EmbeddingsManager:
     def __init__(

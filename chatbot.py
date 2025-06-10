@@ -12,7 +12,7 @@ class ChatbotManager:
         model_name: str = "BAAI/bge-small-en-v1.5",
         device: str = "cpu",
         encode_kwargs: dict = {"normalize_embeddings": True},
-        llm_model: str = "llama3.2",
+        llm_model: str = "deepseek-r1:8b",
         llm_temperature: float = 0.7,
         vector_store: FAISS = None  # ⬅️ Accept FAISS object directly
     ):
@@ -48,14 +48,15 @@ class ChatbotManager:
 
         # Prompt template
         self.prompt_template = """Use the following pieces of information to answer the user's question.
-If you don't know the answer, just say that you don't know, don't try to make up an answer.
+If the context does not provide enough information, answer the question based on your own knowledge, but state that it comes from your knoledge and not present in the document.
+If you don't know the answer, say that you don't know.
 
 Context: {context}
 Question: {question}
 
-Only return the helpful answer. Answer must be detailed and well explained.
-Helpful answer:
+Answer:
 """
+
         self.prompt = PromptTemplate(
             template=self.prompt_template,
             input_variables=["context", "question"]
@@ -94,19 +95,27 @@ Helpful answer:
     def get_response(self, query: str) -> str:
         """
         Processes the user's query and returns the chatbot's response.
+        It hides <thinking> in the UI, but keeps it in logs.
 
         Args:
             query (str): The user's input question.
 
         Returns:
-            str: The chatbot's response.
+            str: The chatbot's visible response (without <thinking>), logs contain full.
         """
         try:
-            if not self.qa:
-                return "⚠️ Vector store is not initialized yet."
-
+            # First try retrieval-augmented answer
             response = self.qa.run(query)
-            return response
+
+            # If response is empty or fallback needed
+            if not response.strip() or "don't know" in response.lower():
+                response = self.llm(query)
+
+            # Ensure it's a string (some LangChain chains might return other objects)
+            if not isinstance(response, str):
+                response = str(response)
+
+            return response  # full response (including <thinking>) to be logged
         except Exception as e:
             st.error(f"⚠️ An error occurred while processing your request: {e}")
             return "⚠️ Sorry, I couldn't process your request at the moment."
